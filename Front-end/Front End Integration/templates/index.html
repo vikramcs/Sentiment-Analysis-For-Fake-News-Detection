@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentiment Analyzer</title>
+  <link rel="stylesheet" href="./static/style.css">
+</head>
+<body>
+  <header>
+    <h1>Sentiment Analyzer</h1>
+    <nav>
+      <div class="button-container">
+        <button> <a href="https://trishul-fakenews.auth.eu-west-1.amazoncognito.com/login?client_id=73iqk0qtjrlndiedr5ln9clgkt&response_type=code&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2F">Log in</a> </button>
+      </div>
+      <div class="theme-switch-wrapper">
+        <div class="theme-switch">
+          <div class="theme-switch-button">
+            <img id="light-mode" src="./static/light.png" class="hide" alt="Light mode">
+            <img id="dark-mode" src="./static/dark.png" alt="Dark mode">
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+  </header>
+  <main>
+    <form action ="/prediction" method ="post">
+    <div class="input-container">
+      <label for="news-title">News Title</label>
+      <input type="text" id="news-title" placeholder="Enter news title" required>
+    </div>
+    <div class="input-container">
+      <label for="news-content">News Content</label>
+      <textarea id="news-content" name="news", placeholder="Enter news content" rows="20" required></textarea>
+    </div>
+    <button id="analyze-btn" onclick="showSpinner()">Analyze</button>
+
+    </form>
+    {% if prediction_text == "" or prediction_text == null %}
+      <div id="result-container"></div>
+    {% else %}
+      <div id="result-container">{{prediction_text}}</div>
+    {% endif %}
+  </main>
+
+  <!-- LOADING SPINNER -->
+  <div id="loading-spinner" class="hide">
+    <img src="./static/loading-2.png" alt="Loading spinner">
+  </div>
+  <div class="overlay hide"></div>
+
+
+  <script>
+// Dark Mode Toggle
+const themeSwitch = document.querySelector('.theme-switch');
+
+themeSwitch.addEventListener('click', () => {
+  document.querySelector("#light-mode").classList.toggle("hide");
+  document.querySelector("#dark-mode").classList.toggle("hide");
+  document.body.classList.toggle('dark-theme');
+  document.querySelector("header").classList.toggle("dark-theme");
+  document.querySelector(".button-container button a").classList.toggle("dark-theme");
+  document.querySelector("main").classList.toggle("dark-theme");
+  document.querySelector('input[type="text"]').classList.toggle("dark-theme");
+  document.querySelector("textarea").classList.toggle("dark-theme");
+  document.querySelector("#analyze-btn").classList.toggle("dark-theme");
+  document.querySelector("#article-real").classList.toggle("dark-theme");
+  document.querySelector("#article-fake").classList.toggle("dark-theme");
+}) 
+
+  </script>
+</body>
+</html>

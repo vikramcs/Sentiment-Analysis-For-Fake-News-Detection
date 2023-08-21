@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fake News Detetction</title>
+  <link rel="stylesheet" href="./static/style.css">
+</head>
+<body>
+  <header id="header">
+    <div class="header_bar">
+      <h1>Fake News Detection </h1>
+      <nav>
+        <div class="button-container">
+          <button> <a href="https://trishul-fakenews.auth.eu-west-1.amazoncognito.com/login?client_id=73iqk0qtjrlndiedr5ln9clgkt&response_type=code&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2F">Log in</a> </button>
+        </div>
+        <div class="theme-switch-wrapper">
+          <div class="theme-switch">
+            <div class="theme-switch-button">
+              <img id="light-mode" src="./static/light.png" class="hide" alt="Light mode">
+              <img id="dark-mode" src="./static/dark.png" alt="Dark mode">
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div id="intro">
+      <div class="banner_area">
+        <p>Welcome to Fake News Detection, the go-to platform for identifying and countering fake news. Our core mission revolves around promoting credibility and empowering users to discern authentic news from falsehoods.</p>
+      </div>
+      <div class="main_area">
+        <div class="vision_item">
+          <div class="vision_img">
+            <span style="-webkit-mask-image: url('../static/1.png')"></span>
+          </div>
+          <p>We foster an enlightened society. Our objective is to equip users with the necessary tools and knowledge to discern misinformation, enabling them to make well-informed decisions.</p>
+        </div>
+        <div class="vision_item">
+          <div class="vision_img">
+            <span style="-webkit-mask-image: url('../static/2.png')"></span>
+          </div>
+          <p>Our journey began with a strong drive to advance media literacy and combat the rampant spread of misinformation. Recognizing the escalating concerns surrounding fake news, we embarked on creating a reliable platform that delivers verified information to the public.</p>
+        </div>
+        <div class="vision_item">
+          <div class="vision_img">
+            <span style="-webkit-mask-image: url('../static/3.png')"></span>
+          </div>
+          <p>Our team consists of passionate professionals with vast expertise in data science, machine learning, cloud computing and web development.</p>
+        </div>
+        <div class="vision_item">
+          <div class="vision_img">
+            <span style="-webkit-mask-image: url('../static/4.png')"></span>
+          </div>
+          <p>Looking ahead, our vision encompasses a world where misinformation finds no footing and accurate information is easily accessible. We remain committed to broadening our impact, collaborating with like-minded organizations, and pioneering innovative solutions to combat the proliferation of fake news.</p>
+        </div>
+      </div>
+    </div>
+    <form action ="/prediction" method ="post">
+      <div class="input-container">
+        <label for="news-title">News Title</label>
+        <input type="text" id="news-title" placeholder="Enter news title" required>
+      </div>
+      <div class="input-container">
+        <label for="news-content">News Content</label>
+        <textarea id="news-content" name="news" placeholder="Enter news content" rows="12" required></textarea>
+      </div>
+      <div id="submit-btn-container">
+        <button id="analyze-btn">Analyze</button>
+      </div>
+    </form>
+
+    <!-- RESULTS -->
+    
+    {% if prediction_text != null %} 
+   
+      <div id="result-container">
+        
+        {% if prediction_text == "True" %} 
+      
+          <div id="article-real"><p>The article is real</p></div>
+        
+        {% else %}  
+      
+          <div id="article-fake"><p>The article is fake</p></div>
+        
+        {% endif %}  
+      
+      </div>
+    
+    {% endif %}  
+   
+      <!-- {% if prediction_text == "" or prediction_text == null %}
+      <div id="result-container"></div>
+      {% else %}
+      <div id="result-container">{{prediction_text}}</div>
+      {% endif %} -->
+
+    <div class="news_section">
+      <div class="latest_news">
+          <div class="news_item">
+            <a href="https://www.rte.ie/news/2023/0728/1396916-garda-overtime/" target="_blank" class="news_content">
+              <h2>€10m announced to increase garda visibility in Dublin
+                <span class="place">Dublin</span></h2>
+              <p>The Government has announced an additional €10 million in funding for garda overtime in Dublin and the Minister for Justice said the money will be made. <span>more</span></p>
+            </a>
+          </div>
+          <div class="news_item">
+            <a href="https://www.rte.ie/news/2023/0728/1396916-garda-overtime/" target="_blank" class="latest_img">
+              <img src="../static/latestnews.webp">
+            </a>
+          </div>
+      </div>
+      <div class="latest_news">
+        <div class="news_item">
+          <a href="https://www.independent.ie/irish-news/irishman-36-arrested-after-fatal-hit-and-run-in-bali/a1960547069.html" target="_blank" class="news_content">
+            <h2>Irishman (36) arrested after fatal hit-and-run in Bali
+              <span class="place">Irish News</span></h2>
+            <p>An Irishman has been arrested for allegedly killing a woman in a hit-and-run on the holiday island of Bali in Indonesia.  <span>more</span></p>
+          </a>
+        </div>
+        <div class="news_item">
+          <a href="https://www.independent.ie/irish-news/irishman-36-arrested-after-fatal-hit-and-run-in-bali/a1960547069.html" target="_blank" class="latest_img">
+            <img src="../static/lt2.jpg">
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- LOADING SPINNER -->
+  <div id="loading-spinner" class="hide">
+    <img src="./static/loading-2.png" alt="Loading spinner">
+  </div>
+  <div class="overlay hide"></div>
+
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1483.0.min.js"></script>
+  <script>
+// Dark Mode Toggle
+const themeSwitch = document.querySelector('.theme-switch');
+const titleInput = document.querySelector("#news-title");
+const contentInput = document.querySelector("#news-content");
+
+if (localStorage.getItem('title')) {
+  titleInput.value = localStorage.getItem('title')
+}
+
+if (localStorage.getItem('content')) {
+  contentInput.value = localStorage.getItem('content')
+}
+
+function switchTheme() {
+  document.querySelector("#light-mode").classList.toggle("hide");
+  document.querySelector("#dark-mode").classList.toggle("hide");
+  document.body.classList.toggle('dark-theme');
+  document.querySelector("header").classList.toggle("dark-theme");
+  document.querySelector(".button-container button a").classList.toggle("dark-theme");
+  document.querySelector("main").classList.toggle("dark-theme");
+  document.querySelector('input[type="text"]').classList.toggle("dark-theme");
+  document.querySelector("textarea").classList.toggle("dark-theme");
+  document.querySelector("#analyze-btn").classList.toggle("dark-theme");
+  document.querySelector("#article-real").classList.toggle("dark-theme");
+  document.querySelector("#article-fake").classList.toggle("dark-theme");
+}
+
+themeSwitch.addEventListener('click', switchTheme);
+
+document.querySelector("#analyze-btn").addEventListener('click', (e) => {
+  localStorage.setItem('title', titleInput.value);
+  localStorage.setItem('content', contentInput.value);
+});
+</script>
+
+<script>
+  // Sticky
+
+window.addEventListener('scroll', function() {
+  var menu = document.getElementById('header');
+  var scrollPosition = window.scrollY;
+
+  if (scrollPosition > 200) {
+    menu.classList.add('sticky');
+    menu.classList.remove('stickyout');
+  } else {
+    menu.classList.remove('sticky');
+    menu.classList.add('stickyout');
+  }
+});
+
+</script>
+</body>
+</html>

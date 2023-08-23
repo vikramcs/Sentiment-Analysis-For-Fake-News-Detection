@@ -1,5 +1,9 @@
 # Sentiment-Analysis-For-Fake-News-Detection
 
+** Data Set **
+
+https://drive.google.com/drive/folders/16N1krozRduuSkzakUnVPPxz65dUDY4Q8?usp=sharing
+
 **Description:**
 This repository contains a Python application that performs sentiment analysis for fake news detection. The application uses natural language processing techniques to analyze the sentiment of textual content and determine the likelihood of it being fake or misleading.
 
